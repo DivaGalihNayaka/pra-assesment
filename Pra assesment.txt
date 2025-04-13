@@ -1,0 +1,172 @@
+// ===============================
+// Tipe B - Antrian Klinik Dua Pratama
+// ===============================
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Pasien {
+    String nomor, namaPasien, namaDokter, jenisDokter;
+
+    Pasien(String nomor, String namaPasien, String namaDokter, String jenisDokter) {
+        this.nomor = nomor;
+        this.namaPasien = namaPasien;
+        this.namaDokter = namaDokter;
+        this.jenisDokter = jenisDokter;
+    }
+}
+
+class Klinik {
+    Queue<Pasien> antrian = new LinkedList<>();
+
+    void ambilNomor(String nomor, String namaPasien, String namaDokter, String jenisDokter) {
+        Pasien p = new Pasien(nomor, namaPasien, namaDokter, jenisDokter);
+        antrian.add(p);
+        System.out.println("Anda adalah pasien " + (nomor.startsWith("A") ? "dokter umum" : "dokter spesialis"));
+        if (antrian.size() > 1 && nomor.startsWith("A")) {
+            System.out.println("Anda menunggu " + (antrian.size() - 1) + " orang lagi");
+        }
+    }
+
+    void panggilanKlinik() {
+        if (!antrian.isEmpty()) {
+            Pasien p = antrian.poll();
+            System.out.println("Nomor " + p.nomor + " dengan nama " + p.namaPasien + " untuk dokter " + p.namaDokter +
+                    " , pasien " + p.jenisDokter + " silahkan ke ruang periksa");
+        } else {
+            System.out.println("Tidak ada antrian saat ini.");
+        }
+    }
+
+    void hapusSemua() {
+        antrian.clear();
+    }
+}
+
+// ===============================
+// Tipe C - Laundry PokokePalingBersih
+// ===============================
+class Member {
+    String noMember, nama, alamat, tipeMember;
+    int lamaTahun;
+
+    Member(String noMember, String nama, String alamat, String tipeMember, int lamaTahun) {
+        this.noMember = noMember;
+        this.nama = nama;
+        this.alamat = alamat;
+        this.tipeMember = tipeMember;
+        this.lamaTahun = lamaTahun;
+    }
+}
+
+class Node {
+    Member data;
+    Node next;
+
+    Node(Member data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class LinkedListMember {
+    Node head;
+
+    void tambahMember(Member m) {
+        Node baru = new Node(m);
+        if (head == null) head = baru;
+        else {
+            Node temp = head;
+            while (temp.next != null) temp = temp.next;
+            temp.next = baru;
+        }
+    }
+
+    void hapusMember(String noMember) {
+        if (head == null) return;
+        if (head.data.noMember.equals(noMember)) {
+            head = head.next;
+            return;
+        }
+        Node curr = head;
+        while (curr.next != null && !curr.next.data.noMember.equals(noMember)) {
+            curr = curr.next;
+        }
+        if (curr.next != null) {
+            curr.next = curr.next.next;
+        }
+    }
+
+    void cariBerdasarkanNama(String nama) {
+        Node temp = head;
+        while (temp != null) {
+            if (temp.data.nama.equalsIgnoreCase(nama)) {
+                tampilkan(temp.data);
+            }
+            temp = temp.next;
+        }
+    }
+
+    void tampilkanLebihDari(int tahun) {
+        Node temp = head;
+        while (temp != null) {
+            if (temp.data.lamaTahun > tahun) {
+                tampilkan(temp.data);
+            }
+            temp = temp.next;
+        }
+    }
+
+    void tampilkan(Member m) {
+        System.out.println("No: " + m.noMember + ", Nama: " + m.nama + ", Alamat: " + m.alamat +
+                ", Tipe: " + m.tipeMember + ", Lama: " + m.lamaTahun + " tahun");
+    }
+}
+
+// ===============================
+// Tipe E - Simulasi Back Forward Browser
+// ===============================
+import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
+
+class Browser {
+    Stack<String> backStack = new Stack<>();
+    Stack<String> forwardStack = new Stack<>();
+    String current = null;
+    List<String> history = new ArrayList<>();
+
+    void tambahData(String url) {
+        if (current != null) {
+            backStack.push(current);
+        }
+        current = url;
+        forwardStack.clear();
+        history.add(url);
+        System.out.println("Website " + url + " dibuka");
+    }
+
+    void back() {
+        if (!backStack.isEmpty()) {
+            forwardStack.push(current);
+            current = backStack.pop();
+            System.out.println("Mundur ke alamat " + current);
+        } else {
+            System.out.println("Tidak ada halaman sebelumnya.");
+        }
+    }
+
+    void forward() {
+        if (!forwardStack.isEmpty()) {
+            backStack.push(current);
+            current = forwardStack.pop();
+            System.out.println("Kembali lagi ke alamat " + current);
+        } else {
+            System.out.println("Tidak ada halaman selanjutnya.");
+        }
+    }
+
+    void history() {
+        System.out.println("History penelusuran web:");
+        System.out.println(history);
+    }
+}
